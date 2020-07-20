@@ -32,6 +32,25 @@ pipeline {
               steps { 
                  aquaMicroscanner imageName: 'alpine:latest', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
                }
+
+        stage('Create kubernetes cluster') {
+			steps {
+				withAWS(region:'us-east-2', credentials:'aws-static') {
+					sh '''
+						eksctl create cluster \
+						--name cluster \
+						--version 1.13 \
+						--nodegroup-name standard-workers \
+						--node-type t2.small \
+						--nodes 2 \
+						--nodes-min 1 \
+						--nodes-max 3 \
+						--node-ami auto
+					'''
+				}
+			}
+		}
+
          }         
          stage('Upload to AWS') {
               steps {
