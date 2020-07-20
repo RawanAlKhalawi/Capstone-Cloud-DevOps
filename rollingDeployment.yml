@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capstone-cloud-devops
+  labels:
+    app: capstone-cloud-devops
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: capstone-cloud-devops
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: capstone-cloud-devops
+    spec:
+      containers:
+        - image: rawanalkhalawi/capstone-cloud-devops
+          imagePullPolicy: Always
+          name: capstone-cloud-devops
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: capstone-cloud-devops
+  labels:
+    app: capstone-cloud-devops
+spec:
+  type: LoadBalancer
+  selector:
+    app: capstone-cloud-devops
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30000
+      protocol: TCP
