@@ -38,7 +38,7 @@ pipeline {
                   withAWS(region:'us-east-2',credentials:'aws-static') {
                   sh 'echo "Uploading content with AWS creds"'
                     //   s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'index.html', bucket:'static-jenkins-pipline')
-                    sh "aws eks --region us-east-2 update-kubeconfig --name cluster"
+                    // sh "aws eks --region us-east-2 update-kubeconfig --name cluster"
                     sh "kubectl config use-context arn:aws:ecs:us-east-2:773751258356:cluster/cluster"
                     sh "kubectl set image deployments/capstone-cloud-devops capstone-cloud-devops=rawanalkhalawi/capstone-cloud-devops:latest"
                     sh "kubectl apply -f rollingDeployment.yml"
