@@ -34,12 +34,12 @@ pipeline {
                }
                
          }    
-         stage('Create kubernetes cluster') {
+         stage('Create cluster') {
 			steps {
 				withAWS(region:'us-east-2', credentials:'aws-static') {
 					sh '''
 						eksctl create cluster \
-						--name cluster \
+						--name clusterrawan \
 						--version 1.17 \
 						--nodegroup-name standard-workers \
 						--node-type t2.small \
@@ -57,8 +57,8 @@ pipeline {
                   withAWS(region:'us-east-2',credentials:'aws-static') {
                   sh 'echo "Uploading content with AWS creds"'
                     //   s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'index.html', bucket:'static-jenkins-pipline')
-                    sh "aws eks --region us-east-2 update-kubeconfig --name cluster"
-                    sh "kubectl config use-context arn:aws:eks:us-east-2:773751258356:cluster/cluster"
+                    sh "aws eks --region us-east-2 update-kubeconfig --name clusterrawan"
+                    sh "kubectl config use-context arn:aws:eks:us-east-2:773751258356:cluster/clusterrawan"
                     sh "kubectl set image deployments/capstone-cloud-devops capstone-cloud-devops=rawanalkhalawi/capstone-cloud-devops:latest"
                     sh "kubectl apply -f rollingDeployment.yml"
                     sh "kubectl get nodes"
