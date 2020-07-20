@@ -57,7 +57,8 @@ pipeline {
                   withAWS(region:'us-east-2',credentials:'aws-static') {
                   sh 'echo "Uploading content with AWS creds"'
                     //   s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'index.html', bucket:'static-jenkins-pipline')
-                    // sh "aws eks --region us-east-2 update-kubeconfig --name clusterrawan"
+                    sshagent(['Jenkins_demo']) {
+                    sh "aws eks --region us-east-2 update-kubeconfig --name clusterrawan"
                     sh "kubectl config use-context arn:aws:eks:us-east-2:773751258356:cluster/clusterrawan"
                     sh "kubectl set image deployments/capstone-cloud-devops capstone-cloud-devops=rawanalkhalawi/capstone-cloud-devops:latest"
                     sh "kubectl apply -f rollingDeployment.yml"
@@ -65,6 +66,7 @@ pipeline {
                     sh "kubectl get deployment"
                     sh "kubectl get pod -o wide"
                     sh "kubectl get service/capstone-cloud-devops"
+                  }
                   }
               }
          }
