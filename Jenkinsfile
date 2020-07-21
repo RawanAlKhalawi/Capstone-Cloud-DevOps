@@ -58,9 +58,9 @@ pipeline {
                   sh 'echo "Uploading content with AWS creds"'
                     //   s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'index.html', bucket:'static-jenkins-pipline')
                     sshagent(['Jenkins_demo']) {
-                    // sh "aws eks --region us-east-2 update-kubeconfig --name clusterrawan"
-                    // sh "kubectl config use-context arn:aws:eks:us-east-2:773751258356:cluster/clusterrawan"
-                    // sh "kubectl set image deployments/capstone-cloud-devops capstone-cloud-devops=rawanalkhalawi/capstone-cloud-devops:latest"
+                    sh "aws eks --region us-east-2 update-kubeconfig --name clusterrawan"
+                    sh "kubectl config use-context arn:aws:eks:us-east-2:773751258356:cluster/clusterrawan"
+                    sh "kubectl set image deployments/capstone-cloud-devops capstone-cloud-devops=rawanalkhalawi/capstone-cloud-devops:latest"
                     sh "kubectl apply -f rollingDeployment.yml"
                     sh "kubectl get nodes"
                     sh "kubectl get deployment"
