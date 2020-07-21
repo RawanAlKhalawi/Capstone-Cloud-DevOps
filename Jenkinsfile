@@ -36,7 +36,7 @@ pipeline {
          }    
         //  stage('Create cluster') {
 		// 	steps {
-		// 		withAWS(region:'us-west-2', credentials:'aws-static') {
+		// 		withAWS(region:'us-east-2', credentials:'aws-static') {
 		// 			sh '''
 		// 				eksctl create cluster \
 		// 				--name clusterrawan \
@@ -54,12 +54,12 @@ pipeline {
      
          stage('Upload to AWS') {
               steps {
-                  withAWS(region:'us-west-2',credentials:'aws-static') {
+                  withAWS(region:'us-east-2',credentials:'aws-static') {
                   sh 'echo "Uploading content with AWS creds"'
                     //   s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'index.html', bucket:'static-jenkins-pipline')
-                   // sshagent(['Jenkins_demo']) {
-                    sh "aws eks --region us-west-2 update-kubeconfig --name clusterrawan"
-                    sh "kubectl config use-context arn:aws:eks:us-west-2:773751258356:cluster/clusterrawan"
+                    sshagent(['Jenkins_demo']) {
+                    sh "aws eks --region us-east-2 update-kubeconfig --name clusterrawan"
+                    sh "kubectl config use-context arn:aws:eks:us-east-2:773751258356:cluster/clusterrawan"
                     sh "kubectl set image deployments/capstone-cloud-devops capstone-cloud-devops=rawanalkhalawi/capstone-cloud-devops:latest"
                     sh "kubectl apply -f rollingDeployment.yml"
                     sh "kubectl get nodes"
@@ -67,7 +67,7 @@ pipeline {
                     sh "kubectl get pod -o wide"
                     sh "kubectl get service/capstone-cloud-devops"
                   }
-                 // }
+                  }
               }
          }
      }
